@@ -56,7 +56,7 @@ class AirflowHandlerTest(tf.test.TestCase):
     self.chicago_taxi_pipeline_dir = os.path.join(
         os.path.dirname(os.path.dirname(__file__)), 'testdata')
     self.pipeline_path = os.path.join(self.chicago_taxi_pipeline_dir,
-                                      'test_pipeline.py')
+                                      'test_pipeline_airflow_1.py')
     self.pipeline_name = 'chicago_taxi_simple'
 
     # Pipeline args for mocking subprocess
@@ -101,8 +101,9 @@ class AirflowHandlerTest(tf.test.TestCase):
     handler.create_pipeline()
     handler_pipeline_path = handler._get_handler_pipeline_path(
         self.pipeline_args[labels.PIPELINE_NAME])
-    self.assertTrue(tf.io.gfile.exists(os.path.join(
-        handler_pipeline_path, 'test_pipeline.py')))
+    self.assertTrue(
+        tf.io.gfile.exists(
+            os.path.join(handler_pipeline_path, 'test_pipeline_airflow_1.py')))
     self.assertTrue(tf.io.gfile.exists(os.path.join(
         handler_pipeline_path, 'pipeline_args.json')))
 
@@ -122,7 +123,7 @@ class AirflowHandlerTest(tf.test.TestCase):
   def test_update_pipeline(self):
     # First create pipeline with test_pipeline.py
     pipeline_path_1 = os.path.join(self.chicago_taxi_pipeline_dir,
-                                   'test_pipeline.py')
+                                   'test_pipeline_airflow_1.py')
     flags_dict_1 = {labels.ENGINE_FLAG: self.engine,
                     labels.PIPELINE_DSL_PATH: pipeline_path_1}
     handler = airflow_handler.AirflowHandler(flags_dict_1)
@@ -130,15 +131,16 @@ class AirflowHandlerTest(tf.test.TestCase):
 
     # Update test_pipeline and run update_pipeline
     pipeline_path_2 = os.path.join(self.chicago_taxi_pipeline_dir,
-                                   'test_pipeline_2.py')
+                                   'test_pipeline_airflow_2.py')
     flags_dict_2 = {labels.ENGINE_FLAG: self.engine,
                     labels.PIPELINE_DSL_PATH: pipeline_path_2}
     handler = airflow_handler.AirflowHandler(flags_dict_2)
     handler.update_pipeline()
     handler_pipeline_path = handler._get_handler_pipeline_path(
         self.pipeline_args[labels.PIPELINE_NAME])
-    self.assertTrue(tf.io.gfile.exists(os.path.join(
-        handler_pipeline_path, 'test_pipeline_2.py')))
+    self.assertTrue(
+        tf.io.gfile.exists(
+            os.path.join(handler_pipeline_path, 'test_pipeline_airflow_2.py')))
     self.assertTrue(tf.io.gfile.exists(os.path.join(
         handler_pipeline_path, 'pipeline_args.json')))
 

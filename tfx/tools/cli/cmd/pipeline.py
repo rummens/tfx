@@ -42,11 +42,32 @@ def pipeline_group() -> None:
     required=True,
     type=str,
     help='Path to Python DSL.')
-def create_pipeline(ctx: Context, engine: Text, pipeline_path: Text) -> None:
+@click.option(
+    '--endpoint',
+    default='',
+    type=str,
+    help='Endpoint of the KFP API service to connect.')
+@click.option(
+    '--iap_client-id',
+    default='',
+    type=str,
+    help='Client ID for IAP protected endpoint.')
+@click.option(
+    '-n',
+    '--namespace',
+    default='kubeflow',
+    type=str,
+    help='Kubernetes namespace to connect to the KFP API.')
+def create_pipeline(ctx: Context, engine: Text, pipeline_path: Text,
+                    endpoint: Text, iap_client_id: Text,
+                    namespace: Text) -> None:
   """Command definition to create a pipeline."""
   click.echo('Creating pipeline')
   ctx.flags_dict[labels.ENGINE_FLAG] = engine
   ctx.flags_dict[labels.PIPELINE_DSL_PATH] = pipeline_path
+  ctx.flags_dict[labels.ENDPOINT] = endpoint
+  ctx.flags_dict[labels.IAP_CLIENT_ID] = iap_client_id
+  ctx.flags_dict[labels.NAMESPACE] = namespace
   handler_factory.create_handler(ctx.flags_dict).create_pipeline()
 
 
@@ -60,11 +81,32 @@ def create_pipeline(ctx: Context, engine: Text, pipeline_path: Text) -> None:
     required=True,
     type=str,
     help='Path to Python DSL file')
-def update_pipeline(ctx: Context, engine: Text, pipeline_path: Text) -> None:
+@click.option(
+    '--endpoint',
+    default='',
+    type=str,
+    help='Endpoint of the KFP API service to connect.')
+@click.option(
+    '--iap_client-id',
+    default='',
+    type=str,
+    help='Client ID for IAP protected endpoint.')
+@click.option(
+    '-n',
+    '--namespace',
+    default='kubeflow',
+    type=str,
+    help='Kubernetes namespace to connect to the KFP API.')
+def update_pipeline(ctx: Context, engine: Text, pipeline_path: Text,
+                    endpoint: Text, iap_client_id: Text,
+                    namespace: Text) -> None:
   """Command definition to update a pipeline."""
   click.echo('Updating pipeline')
   ctx.flags_dict[labels.ENGINE_FLAG] = engine
   ctx.flags_dict[labels.PIPELINE_DSL_PATH] = pipeline_path
+  ctx.flags_dict[labels.ENDPOINT] = endpoint
+  ctx.flags_dict[labels.IAP_CLIENT_ID] = iap_client_id
+  ctx.flags_dict[labels.NAMESPACE] = namespace
   handler_factory.create_handler(ctx.flags_dict).update_pipeline()
 
 
@@ -113,5 +155,3 @@ def list_pipelines(ctx: Context, engine: Text) -> None:
   click.echo('Listing all pipelines')
   ctx.flags_dict[labels.ENGINE_FLAG] = engine
   handler_factory.create_handler(ctx.flags_dict).list_pipelines()
-
-
