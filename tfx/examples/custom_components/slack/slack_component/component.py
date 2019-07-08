@@ -60,6 +60,12 @@ class SlackComponent(base_component.BaseComponent):
       started by SlackComponent with 'lgtm' or 'approve'.
     * To reject the model, a user need to reply the thread sent out by the bot
       started by SlackComponent with 'decline' or 'reject'.
+  If the model is approved, a file named 'BLESSED' will be created under the
+  directory of 'slack_blessing' URI, containing the entire conversation of the
+  slack thread.
+  If the model is rejected, a file named 'NOT_BLESSED' will be created under the
+  directory of 'slack_blessing' URI, containing the entire conversation of the
+  slack thread.
   """
 
   SPEC_CLASS = SlackComponentSpec
